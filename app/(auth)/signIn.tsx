@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const Index = () => {
+const SignIn = () => {
 	return (
 		<View>
-			<Text>Index</Text>
+			<Text>SignIn</Text>
 		</View>
 	);
 };
 
-export default Index;
+export default SignIn;
