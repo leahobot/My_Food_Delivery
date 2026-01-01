@@ -40,6 +40,7 @@ import pizzaOne from "@/assets/images/pizza-one.png";
 import salad from "@/assets/images/salad.png";
 import success from "@/assets/images/success.png";
 import tomatoes from "@/assets/images/tomatoes.png";
+import { AdCardProps } from "./types";
 
 export const CATEGORIES = [
 	{
@@ -64,30 +65,44 @@ export const CATEGORIES = [
 	},
 ];
 
-export const offers = [
+export const AdsCards: AdCardProps[] = [
 	{
 		id: 1,
 		title: "SUMMER COMBO",
 		image: burgerOne,
 		color: "#D33B0D",
+		price: 10.88,
+		layout: {
+			direction: "right",
+			centerContent: true,
+		},
 	},
 	{
 		id: 2,
-		title: "BURGER BASH",
+		title: "BURGERS",
 		image: burgerTwo,
 		color: "#DF5A0C",
+		layout: {
+			direction: "left",
+		},
 	},
 	{
 		id: 3,
-		title: "PIZZA PARTY",
+		title: "PIZZA",
 		image: pizzaOne,
 		color: "#084137",
+		layout: {
+			direction: "right",
+		},
 	},
 	{
 		id: 4,
-		title: "BURRITO DELIGHT",
+		title: "BURRITO",
 		image: buritto,
 		color: "#EB920C",
+		layout: {
+			direction: "left",
+		},
 	},
 ];
 
@@ -154,6 +169,22 @@ export const toppings = [
 		name: "Tomatoes",
 		image: tomatoes,
 		price: 0.7,
+	},
+];
+
+export const userProfile = [
+	{ icon: user, title: "Full Name", value: "John Legend" },
+	{ icon: envelope, title: "Email", value: "g5d5o@example.com" },
+	{ icon: phone, title: "Phone Number", value: "123-456-7890" },
+	{
+		icon: location,
+		title: "Address 1 - (Home)",
+		value: "123 Main Street, Anytown, USA",
+	},
+	{
+		icon: location,
+		title: "Address 1 - (Work)",
+		value: "456 Second Street, Anytown, USA",
 	},
 ];
 

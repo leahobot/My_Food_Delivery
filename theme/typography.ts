@@ -12,6 +12,7 @@ export const fontSizes = {
 	md: 16,
 	lg: 20,
 	xl: 24,
+	xxl: 36,
 };
 
 export const lineHeights = {

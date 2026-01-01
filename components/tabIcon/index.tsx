@@ -1,13 +1,7 @@
+import { TabIconProps } from "@/constants/types";
 import React from "react";
-import { Image, ImageSourcePropType, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 import { styles } from "./styles";
-
-type TabIconProps = {
-	icon: ImageSourcePropType;
-	focused: boolean;
-	title: string;
-	cartItems?: number;
-};
 
 const TabIcon = ({ icon, focused, title, cartItems }: TabIconProps) => {
 	return (

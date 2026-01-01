@@ -1,11 +1,98 @@
 import React from "react";
-import { Text, View } from "react-native";
+import {
+	FlatList,
+	Image,
+	Pressable,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+// constants
+import { images, userProfile } from "@/constants";
+import { baseStyles } from "@/theme/baseStyles";
+import { useRouter } from "expo-router";
 
 const Profile = () => {
+	const router = useRouter();
+
 	return (
-		<View>
-			<Text>Profile</Text>
-		</View>
+		<SafeAreaView style={baseStyles.profileTab}>
+			<View style={baseStyles.profileHeader}>
+				<Pressable
+					hitSlop={10}
+					onPress={() => router.back()}>
+					<Image
+						source={images.arrowBack}
+						style={baseStyles.profileIcon}
+					/>
+				</Pressable>
+				<Text style={baseStyles.profileHeaderText}>Profile</Text>
+				<Pressable
+					hitSlop={10}
+					onPress={() => router.navigate("/(tabs)/search")}>
+					<Image
+						source={images.search}
+						style={baseStyles.profileIcon}
+					/>
+				</Pressable>
+			</View>
+
+			<FlatList
+				data={userProfile}
+				keyExtractor={(_, index) => index.toString()}
+				showsVerticalScrollIndicator={false}
+				renderItem={({ item }) => (
+					<View style={baseStyles.profileItem}>
+						<View style={baseStyles.profileIconWrapper}>
+							<Image
+								source={item.icon}
+								style={baseStyles.profileIcon}
+							/>
+						</View>
+
+						<View>
+							<Text style={baseStyles.profileLabel}>
+								{item.title}
+							</Text>
+							<Text style={baseStyles.profileValue}>
+								{item.value}
+							</Text>
+						</View>
+					</View>
+				)}
+				ListHeaderComponent={
+					<View style={baseStyles.profileAvatarContainer}>
+						<Image
+							source={images.avatar}
+							resizeMode="cover"
+							style={baseStyles.profileAvatar}
+						/>
+					</View>
+				}
+				ListFooterComponent={
+					<View style={baseStyles.profileButtons}>
+						<TouchableOpacity style={baseStyles.profileEditButton}>
+							<Text style={baseStyles.profileEditText}>
+								Edit Profile
+							</Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={baseStyles.profileLogoutButton}>
+							<Image
+								source={images.logout}
+								style={baseStyles.logoutIcon}
+								resizeMode="cover"
+							/>
+							<Text style={baseStyles.profileLogoutText}>
+								Logout
+							</Text>
+						</TouchableOpacity>
+					</View>
+				}
+			/>
+		</SafeAreaView>
 	);
 };
 
