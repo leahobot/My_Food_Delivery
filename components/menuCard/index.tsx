@@ -8,9 +8,12 @@ import { useCartContext } from "@/context/cartProvider";
 // constants
 import { images } from "@/constants";
 import { MenuItem } from "@/constants/types";
+import { useRouter } from "expo-router";
 
 const MenuCard = ({ item }: { item: MenuItem }) => {
+	const router = useRouter();
 	const { addToCart } = useCartContext();
+
 	const [isItemAdded, setIsItemAdded] = useState(false);
 
 	const handleAddToCart = async () => {
@@ -23,7 +26,14 @@ const MenuCard = ({ item }: { item: MenuItem }) => {
 	};
 
 	return (
-		<TouchableOpacity style={styles.card}>
+		<TouchableOpacity
+			style={styles.card}
+			onPress={() =>
+				router.push({
+					pathname: "/menuDetails/[id]",
+					params: { id: item.$id?.toString() },
+				})
+			}>
 			<View style={styles.imageContainer}>
 				<Image
 					source={

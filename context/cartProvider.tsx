@@ -10,12 +10,14 @@ import React, {
 } from "react";
 
 const CART_KEY = "CART_ITEMS";
+const MENU_ITEMS_CACHE_KEY = "MENU_ITEMS_CACHE";
 
 type CartContextType = {
 	cartItems: MenuItem[];
 	noOfCartItems: number;
 	addToCart: (item: MenuItem) => void;
 	removeFromCart: (itemId: string) => void;
+	getMenuItemById: (itemId: string) => MenuItem | undefined;
 	clearCart: () => void;
 	loading: boolean;
 };
@@ -24,6 +26,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
 	const [cartItems, setCartItems] = useState<MenuItem[]>([]);
+	const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 	const [loading, setLoading] = useState(true);
 
 	// Load cart from AsyncStorage once
@@ -39,6 +42,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 			setLoading(false);
 		}
 	}, []);
+
+	const loadMenuItems = useCallback(async () => {
+		const stored = await AsyncStorage.getItem(MENU_ITEMS_CACHE_KEY);
+		const parsed = stored ? JSON.parse(stored) : [];
+
+		setMenuItems(parsed);
+	}, []);
+
+	useEffect(() => {
+		loadMenuItems();
+	}, [loadMenuItems]);
 
 	useEffect(() => {
 		loadCart();
@@ -73,6 +87,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 		});
 	};
 
+	const getMenuItemById = (id: string) => {
+		if (!id) return undefined;
+
+		return menuItems.find((item) => item.$id?.toString() === id);
+	};
+
 	const clearCart = () => {
 		setCartItems([]);
 
@@ -86,6 +106,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 				noOfCartItems: cartItems.length,
 				addToCart,
 				removeFromCart,
+				getMenuItemById,
 				clearCart,
 				loading,
 			}}>
