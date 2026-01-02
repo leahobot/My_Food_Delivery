@@ -1,13 +1,19 @@
-import AdCard from "@/components/adCard";
-import { AdsCards, images } from "@/constants";
-import { baseStyles } from "@/theme/baseStyles";
 import { useRouter } from "expo-router";
 import React from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// components
+import AdCard from "@/components/adCard";
+import { useCartContext } from "@/context/cartProvider";
+
+// constants
+import { AdsCards, images } from "@/constants";
+import { baseStyles } from "@/theme/baseStyles";
+
 const Index = () => {
 	const router = useRouter();
+	const { noOfCartItems } = useCartContext();
 
 	return (
 		<SafeAreaView style={baseStyles.homeTab}>
@@ -30,9 +36,14 @@ const Index = () => {
 						source={images.bag}
 						style={baseStyles.bag}
 					/>
-					<View style={baseStyles.badge}>
-						<Text style={baseStyles.badgeText}>2</Text>
-					</View>
+
+					{noOfCartItems !== undefined && noOfCartItems > 0 && (
+						<View style={baseStyles.badge}>
+							<Text style={baseStyles.badgeText}>
+								{noOfCartItems}
+							</Text>
+						</View>
+					)}
 				</TouchableOpacity>
 			</View>
 

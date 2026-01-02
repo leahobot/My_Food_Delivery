@@ -7,13 +7,22 @@ import { images } from "@/constants";
 import { AdCardProps } from "@/constants/types";
 import { styles } from "./styles";
 
-const AdCard = ({ title, color, image, layout, price }: AdCardProps) => {
+const AdCard = ({
+	title,
+	color,
+	image,
+	layout,
+	searchQuery,
+	price,
+}: AdCardProps) => {
 	const router = useRouter();
 	const isRight = layout.direction === "right";
 
 	return (
 		<TouchableOpacity
-			onPress={() => router.push("/(tabs)/search")}
+			onPress={() =>
+				router.push(`/(tabs)/search?category=${searchQuery}`)
+			}
 			style={[styles.card, { backgroundColor: color }]}>
 			<View
 				style={[

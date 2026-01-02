@@ -13,6 +13,7 @@ export type AdCardProps = {
 	color: string;
 	image: ImageSourcePropType;
 	layout: AdCardLayout;
+	searchQuery: string;
 	price?: number;
 };
 

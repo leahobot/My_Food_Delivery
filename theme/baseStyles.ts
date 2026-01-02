@@ -24,7 +24,9 @@ export const baseStyles = StyleSheet.create({
 		height: "100%",
 		width: "100%",
 		backgroundColor: "#FFFFFF",
-		padding: 20,
+		paddingHorizontal: 20,
+		paddingTop: 20,
+		paddingBottom: 50,
 	},
 
 	homeHeader: {
@@ -188,6 +190,13 @@ export const baseStyles = StyleSheet.create({
 		width: 24,
 		height: 24,
 	},
+	searchTab: {
+		height: "100%",
+		width: "100%",
+		paddingHorizontal: 20,
+		paddingTop: 20,
+		paddingBottom: 100,
+	},
 	inputContainer: {
 		width: "100%",
 		height: 52,
@@ -242,15 +251,14 @@ export const baseStyles = StyleSheet.create({
 		textAlign: "center",
 	},
 	categories: {
-		flexDirection: "row",
-		gap: 10,
-		marginTop: 28,
+		marginVertical: 28,
 	},
 	category: {
-		paddingVertical: 12,
+		paddingVertical: 14,
 		paddingHorizontal: 24,
+		marginRight: 10,
 		backgroundColor: "#FFFFFF",
-		borderRadius: 50,
+		borderRadius: 25,
 	},
 	categoryIsActive: {
 		backgroundColor: "#FE8C00",
@@ -266,6 +274,18 @@ export const baseStyles = StyleSheet.create({
 	loader: {
 		marginTop: 200,
 	},
-
-	errorText: {},
+	errorImage: {
+		height: 300,
+		width: 350,
+	},
+	errorText: {
+		color: "#181C2E",
+		fontFamily: fontFamilies.semiBold,
+		fontSize: fontSizes.md,
+		textAlign: "center",
+	},
+	searchResults: {
+		marginTop: 60,
+		justifyContent: "space-between",
+	},
 });

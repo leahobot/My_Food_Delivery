@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // components
 import TabIcon from "@/components/tabIcon";
+import { useCartContext } from "@/context/cartProvider";
 
 // constants
 import { images } from "@/constants";
@@ -11,6 +12,7 @@ import { baseStyles } from "../../theme/baseStyles";
 
 export default function TabLayout() {
 	const insets = useSafeAreaInsets();
+	const { noOfCartItems } = useCartContext();
 
 	return (
 		<Tabs
@@ -59,7 +61,7 @@ export default function TabLayout() {
 							title="Cart"
 							icon={images.bag}
 							focused={focused}
-							cartItems={1}
+							cartItems={noOfCartItems}
 						/>
 					),
 				}}

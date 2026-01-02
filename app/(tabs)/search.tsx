@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import React, { useMemo, useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useMemo, useState } from "react";
 import {
 	ActivityIndicator,
 	FlatList,
@@ -16,6 +16,7 @@ import MenuCard from "@/components/menuCard";
 
 // api & hooks
 import { getMenuItems } from "@/api/appwrite";
+import { useCartContext } from "@/context/cartProvider";
 import { useFetch } from "@/hooks/useFetch";
 
 // constants
@@ -25,13 +26,19 @@ import { baseStyles } from "@/theme/baseStyles";
 
 const Search = () => {
 	const router = useRouter();
-	const { data: menuItems, loading, error } = useFetch(getMenuItems);
+	const { category } = useLocalSearchParams<{ category: string }>();
 
+	const { data: menuItems, loading, error, refetch } = useFetch(getMenuItems);
+	const { noOfCartItems } = useCartContext();
+
+	const [activeCategory, setActiveCategory] = useState<string>("all");
 	const [searchValue, setSearchValue] = useState("");
-	const [activeCategory, setActiveCategory] = useState({
-		id: "1",
-		name: "All",
-	});
+
+	useEffect(() => {
+		if (category) {
+			setActiveCategory(category);
+		}
+	}, [category]);
 
 	// -------------------------
 	// Memoized filtered results
@@ -39,15 +46,14 @@ const Search = () => {
 	const filteredMenuItems = useMemo(() => {
 		if (!menuItems) return [];
 
+		const search = searchValue.toLowerCase();
+
 		return menuItems.filter((item: MenuItem) => {
 			const matchesCategory =
-				activeCategory.name.toLowerCase() === "all" ||
-				item.category.toLowerCase() ===
-					activeCategory.name.toLowerCase();
+				activeCategory === "all" ||
+				item.category.toLowerCase() === activeCategory;
 
-			const matchesSearch = item.name
-				.toLowerCase()
-				.includes(searchValue.toLowerCase());
+			const matchesSearch = item.name.toLowerCase().includes(search);
 
 			return matchesCategory && matchesSearch;
 		});
@@ -56,9 +62,9 @@ const Search = () => {
 	// -------------------------
 	// Loading & error states
 	// -------------------------
-	if (loading && !menuItems?.length) {
+	if (loading) {
 		return (
-			<SafeAreaView style={baseStyles.homeTab}>
+			<SafeAreaView style={baseStyles.searchTab}>
 				<ActivityIndicator
 					size="large"
 					color="#FF7622"
@@ -70,7 +76,13 @@ const Search = () => {
 
 	if (error) {
 		return (
-			<SafeAreaView style={baseStyles.homeTab}>
+			<SafeAreaView style={baseStyles.searchTab}>
+				<Image
+					source={images.error}
+					resizeMode="cover"
+					height={50}
+					width={50}
+				/>
 				<Text style={baseStyles.errorText}>
 					Something went wrong. Try again later.
 				</Text>
@@ -79,7 +91,7 @@ const Search = () => {
 	}
 
 	return (
-		<SafeAreaView style={baseStyles.homeTab}>
+		<SafeAreaView style={baseStyles.searchTab}>
 			{/* Header */}
 			<View style={baseStyles.homeHeader}>
 				<View>
@@ -98,9 +110,13 @@ const Search = () => {
 						source={images.bag}
 						style={baseStyles.bag}
 					/>
-					<View style={baseStyles.badge}>
-						<Text style={baseStyles.badgeText}>2</Text>
-					</View>
+					{noOfCartItems !== undefined && noOfCartItems > 0 && (
+						<View style={baseStyles.badge}>
+							<Text style={baseStyles.badgeText}>
+								{noOfCartItems}
+							</Text>
+						</View>
+					)}
 				</TouchableOpacity>
 			</View>
 
@@ -128,11 +144,12 @@ const Search = () => {
 			<View style={baseStyles.categories}>
 				<FlatList
 					data={CATEGORIES}
-					keyExtractor={(item) => item.id.toString()}
+					keyExtractor={(item) => item.id}
 					showsHorizontalScrollIndicator={false}
 					horizontal
 					renderItem={({ item }) => {
-						const isActive = item.id === activeCategory?.id;
+						const normalizedName = item.name.toLowerCase();
+						const isActive = normalizedName === activeCategory;
 
 						return (
 							<TouchableOpacity
@@ -140,7 +157,10 @@ const Search = () => {
 									baseStyles.category,
 									isActive && baseStyles.categoryIsActive,
 								]}
-								onPress={() => setActiveCategory(item)}>
+								onPress={() =>
+									setActiveCategory(normalizedName)
+								}
+								activeOpacity={0.8}>
 								<Text
 									style={[
 										baseStyles.categoryText,
@@ -160,23 +180,27 @@ const Search = () => {
 				data={filteredMenuItems}
 				keyExtractor={(item: MenuItem) => item.$id.toString()}
 				showsVerticalScrollIndicator={false}
-				ListEmptyComponent={() => (
-					<View style={baseStyles.emptyState}>
-						<Image
-							source={images.emptyState}
-							resizeMode="cover"
-							style={baseStyles.emptyStateImage}
-							width={172}
-							height={128}
-						/>
-						<Text style={baseStyles.emptyStateTitle}>
-							Nothing matched your search
-						</Text>
-						<Text style={baseStyles.emptyStateText}>
-							Try a different search term or check for typos.
-						</Text>
-					</View>
-				)}
+				numColumns={2}
+				refreshing={loading}
+				onRefresh={refetch}
+				columnWrapperStyle={baseStyles.searchResults}
+				ListEmptyComponent={
+					!loading ? (
+						<View style={baseStyles.emptyState}>
+							<Image
+								source={images.emptyState}
+								resizeMode="cover"
+								style={baseStyles.emptyStateImage}
+							/>
+							<Text style={baseStyles.emptyStateTitle}>
+								Nothing matched your search
+							</Text>
+							<Text style={baseStyles.emptyStateText}>
+								Try a different search term or check for typos.
+							</Text>
+						</View>
+					) : null
+				}
 				renderItem={({ item }: { item: MenuItem }) => (
 					<MenuCard item={item} />
 				)}

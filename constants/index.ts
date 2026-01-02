@@ -29,6 +29,7 @@ import cheese from "@/assets/images/cheese.png";
 import coleslaw from "@/assets/images/coleslaw.png";
 import cucumber from "@/assets/images/cucumber.png";
 import emptyState from "@/assets/images/empty-state.png";
+import error from "@/assets/images/error.png";
 import fries from "@/assets/images/fries.png";
 import loginGraphic from "@/assets/images/login-graphic.png";
 import logo from "@/assets/images/logo.png";
@@ -76,6 +77,7 @@ export const AdsCards: AdCardProps[] = [
 			direction: "right",
 			centerContent: true,
 		},
+		searchQuery: "all",
 	},
 	{
 		id: 2,
@@ -85,6 +87,7 @@ export const AdsCards: AdCardProps[] = [
 		layout: {
 			direction: "left",
 		},
+		searchQuery: "burger",
 	},
 	{
 		id: 3,
@@ -94,6 +97,7 @@ export const AdsCards: AdCardProps[] = [
 		layout: {
 			direction: "right",
 		},
+		searchQuery: "pizza",
 	},
 	{
 		id: 4,
@@ -103,6 +107,7 @@ export const AdsCards: AdCardProps[] = [
 		layout: {
 			direction: "left",
 		},
+		searchQuery: "burrito",
 	},
 ];
 
@@ -199,6 +204,7 @@ export const images = {
 	coleslaw,
 	cucumber,
 	emptyState,
+	error,
 	fries,
 	loginGraphic,
 	logo,
