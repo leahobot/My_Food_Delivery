@@ -79,7 +79,7 @@ export const AdsCards: AdCardProps[] = [
 	},
 	{
 		id: 2,
-		title: "BURGERS",
+		title: "BURGER BASH",
 		image: burgerTwo,
 		color: "#DF5A0C",
 		layout: {
@@ -88,7 +88,7 @@ export const AdsCards: AdCardProps[] = [
 	},
 	{
 		id: 3,
-		title: "PIZZA",
+		title: "PIZZA PARTY",
 		image: pizzaOne,
 		color: "#084137",
 		layout: {
@@ -97,7 +97,7 @@ export const AdsCards: AdCardProps[] = [
 	},
 	{
 		id: 4,
-		title: "BURRITO",
+		title: "BURRITO DELIGHT",
 		image: buritto,
 		color: "#EB920C",
 		layout: {

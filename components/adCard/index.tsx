@@ -13,7 +13,7 @@ const AdCard = ({ title, color, image, layout, price }: AdCardProps) => {
 
 	return (
 		<TouchableOpacity
-			onPress={() => router.navigate("/(tabs)/search")}
+			onPress={() => router.push("/(tabs)/search")}
 			style={[styles.card, { backgroundColor: color }]}>
 			<View
 				style={[

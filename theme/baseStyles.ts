@@ -114,6 +114,18 @@ export const baseStyles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		gap: 10,
+		paddingTop: 20,
+		paddingHorizontal: 14,
+		backgroundColor: "#FFFFFF",
+	},
+	profileItemFirst: {
+		borderTopLeftRadius: 20,
+		borderTopRightRadius: 20,
+	},
+	profileItemLast: {
+		borderBottomLeftRadius: 20,
+		borderBottomRightRadius: 20,
+		paddingBottom: 20,
 	},
 	profileIconWrapper: {
 		width: 48,
@@ -122,7 +134,7 @@ export const baseStyles = StyleSheet.create({
 		borderRadius: 50,
 		alignItems: "center",
 		justifyContent: "center",
-		borderWidth: 1,
+		borderWidth: 2,
 		borderColor: "#fe8c001a",
 	},
 	profileLabel: {
@@ -176,4 +188,84 @@ export const baseStyles = StyleSheet.create({
 		width: 24,
 		height: 24,
 	},
+	inputContainer: {
+		width: "100%",
+		height: 52,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		backgroundColor: "#FFFFFF",
+		borderRadius: 40,
+		paddingHorizontal: 20,
+
+		// iOS shadow
+		shadowColor: "#000",
+		shadowOpacity: 0.12,
+		shadowRadius: 10,
+		shadowOffset: {
+			width: 0,
+			height: 6,
+		},
+
+		// Android shadow
+		elevation: 10,
+	},
+	input: {
+		flex: 1,
+		fontFamily: fontFamilies.bold,
+		fontSize: fontSizes.md,
+		color: "#181C2E",
+	},
+	searchIcon: {
+		width: 20,
+		height: 20,
+	},
+	emptyState: {
+		alignItems: "center",
+		gap: 14,
+		marginTop: 80,
+	},
+	emptyStateImage: {
+		width: 172,
+		height: 128,
+	},
+	emptyStateTitle: {
+		fontFamily: fontFamilies.bold,
+		fontSize: fontSizes.lg,
+		color: "#181C2E",
+		textAlign: "center",
+	},
+	emptyStateText: {
+		fontFamily: fontFamilies.medium,
+		fontSize: fontSizes.md,
+		color: "#878787",
+		textAlign: "center",
+	},
+	categories: {
+		flexDirection: "row",
+		gap: 10,
+		marginTop: 28,
+	},
+	category: {
+		paddingVertical: 12,
+		paddingHorizontal: 24,
+		backgroundColor: "#FFFFFF",
+		borderRadius: 50,
+	},
+	categoryIsActive: {
+		backgroundColor: "#FE8C00",
+	},
+	categoryTextActive: {
+		color: "#FFFFFF",
+	},
+	categoryText: {
+		color: "#878787",
+		fontFamily: fontFamilies.semiBold,
+		fontSize: fontSizes.md,
+	},
+	loader: {
+		marginTop: 200,
+	},
+
+	errorText: {},
 });

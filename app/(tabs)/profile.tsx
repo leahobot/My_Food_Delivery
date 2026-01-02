@@ -31,7 +31,7 @@ const Profile = () => {
 				<Text style={baseStyles.profileHeaderText}>Profile</Text>
 				<Pressable
 					hitSlop={10}
-					onPress={() => router.navigate("/(tabs)/search")}>
+					onPress={() => router.push("/(tabs)/search")}>
 					<Image
 						source={images.search}
 						style={baseStyles.profileIcon}
@@ -43,8 +43,14 @@ const Profile = () => {
 				data={userProfile}
 				keyExtractor={(_, index) => index.toString()}
 				showsVerticalScrollIndicator={false}
-				renderItem={({ item }) => (
-					<View style={baseStyles.profileItem}>
+				renderItem={({ item, index }) => (
+					<View
+						style={[
+							baseStyles.profileItem,
+							index === 0 && baseStyles.profileItemFirst,
+							index === userProfile.length - 1 &&
+								baseStyles.profileItemLast,
+						]}>
 						<View style={baseStyles.profileIconWrapper}>
 							<Image
 								source={item.icon}

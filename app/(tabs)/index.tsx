@@ -25,7 +25,7 @@ const Index = () => {
 
 				<TouchableOpacity
 					style={baseStyles.cart}
-					onPress={() => router.navigate("/(tabs)/cart")}>
+					onPress={() => router.push("/(tabs)/cart")}>
 					<Image
 						source={images.bag}
 						style={baseStyles.bag}

@@ -22,3 +22,22 @@ export type TabIconProps = {
 	title: string;
 	cartItems?: number;
 };
+
+export type MenuItem = {
+	$id: number;
+	$createdAt: string;
+	$updatedAt: string;
+	name: string;
+	description: string;
+	category: string;
+	price: number;
+	imageUrl: ImageSourcePropType;
+	rating: number;
+	calories: number;
+	fat: number;
+	protein: number;
+	carbs: number;
+	allergens?: string[];
+	isAvailable?: boolean;
+	currency?: string;
+};
