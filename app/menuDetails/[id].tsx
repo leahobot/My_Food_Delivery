@@ -1,7 +1,3 @@
-import Allergens from "@/components/Allergens/Index";
-import MenuDetailsCard from "@/components/menuDetailsCard";
-import OptionsCard from "@/components/optionsCard";
-import { images, sides, toppings } from "@/constants";
 import { useStateContext } from "@/context/StateProvider";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
@@ -16,7 +12,15 @@ import {
 	View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+// constants
+import { images, sides, toppings } from "@/constants";
 import { styles } from "./styles";
+
+// components
+import Allergens from "@/components/Allergens/Index";
+import MenuDetailsCard from "@/components/menuDetailsCard";
+import OptionsCard from "@/components/optionsCard";
 
 const MenuDetails = () => {
 	const router = useRouter();

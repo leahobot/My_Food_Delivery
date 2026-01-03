@@ -308,4 +308,33 @@ export const baseStyles = StyleSheet.create({
 		fontSize: fontSizes.xs,
 		color: "#FE8C00",
 	},
+	cartItemsContainer: {
+		gap: 20,
+		marginTop: 10,
+		marginBottom: 30,
+	},
+	emptyCart: {
+		marginTop: 60,
+		alignItems: "center",
+		gap: 20,
+	},
+	emptyCartText: {
+		fontFamily: fontFamilies.bold,
+		fontSize: fontSizes.lg,
+		color: "#181C2E",
+		textAlign: "center",
+	},
+	startShopping: {
+		height: 48,
+		width: "50%",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#fe8c00d8",
+		borderRadius: 30,
+	},
+	startShoppingText: {
+		fontFamily: fontFamilies.semiBold,
+		fontSize: fontSizes.md,
+		color: "#FFFFFF",
+	},
 });
