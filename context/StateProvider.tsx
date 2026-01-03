@@ -1,4 +1,4 @@
-import { MenuItem } from "@/constants/types";
+import { MenuItem, MenuOptions, StateContextType } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, {
 	createContext,
@@ -12,22 +12,16 @@ import React, {
 const CART_KEY = "CART_ITEMS";
 const MENU_ITEMS_CACHE_KEY = "MENU_ITEMS_CACHE";
 
-type CartContextType = {
-	cartItems: MenuItem[];
-	noOfCartItems: number;
-	addToCart: (item: MenuItem) => void;
-	removeFromCart: (itemId: string) => void;
-	getMenuItemById: (itemId: string) => MenuItem | undefined;
-	clearCart: () => void;
-	loading: boolean;
-};
+const StateContext = createContext<StateContextType | undefined>(undefined);
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
-
-export const CartProvider = ({ children }: { children: ReactNode }) => {
+export const StateProvider = ({ children }: { children: ReactNode }) => {
 	const [cartItems, setCartItems] = useState<MenuItem[]>([]);
 	const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [menuOptions, setMenuOptions] = useState<MenuOptions>({
+		toppings: [],
+		sides: [],
+	});
 
 	// Load cart from AsyncStorage once
 	const loadCart = useCallback(async () => {
@@ -99,24 +93,53 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 		AsyncStorage.removeItem(CART_KEY);
 	};
 
+	const toggleTopping = (name: string) => {
+		setMenuOptions((prev) => {
+			const exists = prev.toppings.includes(name);
+
+			return {
+				...prev,
+				toppings: exists
+					? prev.toppings.filter((t) => t !== name)
+					: [...prev.toppings, name],
+			};
+		});
+	};
+
+	const toggleSide = (name: string) => {
+		setMenuOptions((prev) => {
+			const exists = prev.sides.includes(name);
+
+			return {
+				...prev,
+				sides: exists
+					? prev.sides.filter((s) => s !== name)
+					: [...prev.sides, name],
+			};
+		});
+	};
+
 	return (
-		<CartContext.Provider
+		<StateContext.Provider
 			value={{
 				cartItems,
 				noOfCartItems: cartItems.length,
+				loading,
+				menuOptions,
 				addToCart,
 				removeFromCart,
 				getMenuItemById,
 				clearCart,
-				loading,
+				toggleTopping,
+				toggleSide,
 			}}>
 			{children}
-		</CartContext.Provider>
+		</StateContext.Provider>
 	);
 };
 
-export const useCartContext = () => {
-	const context = useContext(CartContext);
+export const useStateContext = () => {
+	const context = useContext(StateContext);
 
 	if (!context) {
 		throw new Error("useCart must be used within a CartProvider");

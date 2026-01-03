@@ -16,7 +16,7 @@ import MenuCard from "@/components/menuCard";
 
 // api & hooks
 import { getMenuItems } from "@/api/appwrite";
-import { useCartContext } from "@/context/cartProvider";
+import { useStateContext } from "@/context/StateProvider";
 import { useFetch } from "@/hooks/useFetch";
 
 // constants
@@ -29,7 +29,7 @@ const Search = () => {
 	const { category } = useLocalSearchParams<{ category: string }>();
 
 	const { data: menuItems, loading, error, refetch } = useFetch(getMenuItems);
-	const { noOfCartItems } = useCartContext();
+	const { noOfCartItems } = useStateContext();
 
 	const [activeCategory, setActiveCategory] = useState<string>("all");
 	const [searchValue, setSearchValue] = useState("");

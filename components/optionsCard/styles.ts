@@ -4,9 +4,9 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
 	container: {
 		position: "relative",
-		width: 84,
-		height: 99,
-		borderRadius: 15,
+		width: 95,
+		height: 110,
+		borderRadius: 18,
 		backgroundColor: "#FFFFFF",
 
 		// iOS shadow
@@ -25,8 +25,8 @@ export const styles = StyleSheet.create({
 		position: "absolute",
 		top: 0,
 		width: "100%",
-		height: 61,
-		borderRadius: 15,
+		height: 70,
+		borderRadius: 18,
 		backgroundColor: "#FFFFFF",
 		zIndex: 1,
 		alignItems: "center",
@@ -34,8 +34,8 @@ export const styles = StyleSheet.create({
 	},
 	price: {
 		position: "absolute",
-		left: 26,
-		bottom: 36,
+		left: 28,
+		bottom: 40,
 		color: "#3C2F2F",
 		fontSize: fontSizes.xs,
 		fontFamily: fontFamilies.bold,
@@ -45,15 +45,15 @@ export const styles = StyleSheet.create({
 		position: "absolute",
 		bottom: 0,
 		width: "100%",
-		height: 50,
+		height: 70,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
 		backgroundColor: "#3C2F2F",
-		paddingTop: 10,
-		paddingHorizontal: 6,
-		borderBottomLeftRadius: 15,
-		borderBottomRightRadius: 15,
+		paddingTop: 25,
+		paddingHorizontal: 8,
+		borderBottomLeftRadius: 20,
+		borderBottomRightRadius: 20,
 		overflow: "hidden",
 	},
 	name: {
@@ -62,7 +62,6 @@ export const styles = StyleSheet.create({
 		fontFamily: fontFamilies.semiBold,
 	},
 	icon: {
-		backgroundColor: "#EF2A39",
 		width: 16,
 		height: 16,
 		alignItems: "center",

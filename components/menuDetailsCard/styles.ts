@@ -11,10 +11,14 @@ export const styles = StyleSheet.create({
 	},
 	menuImage: {
 		position: "absolute",
-		top: -10,
-		right: -3,
+		top: 0,
+		right: 0,
 		width: "57%",
 		height: 250,
+	},
+	menuImageContent: {
+		width: "100%",
+		height: "100%",
 	},
 	menuName: {
 		fontFamily: fontFamilies.bold,
@@ -67,10 +71,5 @@ export const styles = StyleSheet.create({
 		flexDirection: "row",
 		gap: 28,
 		flexWrap: "wrap",
-	},
-
-	menuImageContent: {
-		width: "100%",
-		height: "100%",
 	},
 });

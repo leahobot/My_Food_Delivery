@@ -3,7 +3,7 @@ import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
 // components & hooks
-import { useCartContext } from "@/context/cartProvider";
+import { useStateContext } from "@/context/StateProvider";
 
 // constants
 import { images } from "@/constants";
@@ -12,7 +12,7 @@ import { useRouter } from "expo-router";
 
 const MenuCard = ({ item }: { item: MenuItem }) => {
 	const router = useRouter();
-	const { addToCart } = useCartContext();
+	const { addToCart } = useStateContext();
 
 	const [isItemAdded, setIsItemAdded] = useState(false);
 

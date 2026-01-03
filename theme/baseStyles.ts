@@ -288,4 +288,24 @@ export const baseStyles = StyleSheet.create({
 		marginTop: 60,
 		justifyContent: "space-between",
 	},
+	cartHeader: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		marginBottom: 20,
+	},
+	changeLocation: {
+		height: 32,
+		width: 130,
+		borderRadius: 100,
+		alignItems: "center",
+		justifyContent: "center",
+		borderColor: "#FE8C00",
+		borderWidth: 1,
+	},
+	locationText: {
+		fontFamily: fontFamilies.bold,
+		fontSize: fontSizes.xs,
+		color: "#FE8C00",
+	},
 });

@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 // components
 import AdCard from "@/components/adCard";
-import { useCartContext } from "@/context/cartProvider";
+import { useStateContext } from "@/context/StateProvider";
 
 // constants
 import { AdsCards, images } from "@/constants";
@@ -13,7 +13,7 @@ import { baseStyles } from "@/theme/baseStyles";
 
 const Index = () => {
 	const router = useRouter();
-	const { noOfCartItems } = useCartContext();
+	const { noOfCartItems } = useStateContext();
 
 	return (
 		<SafeAreaView style={baseStyles.homeTab}>

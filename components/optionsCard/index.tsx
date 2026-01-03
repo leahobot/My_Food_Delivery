@@ -9,17 +9,30 @@ import {
 } from "react-native";
 import { styles } from "./styles";
 
+type OptionsCardProps = {
+	name: string;
+	price: number;
+	image: ImageSourcePropType;
+	isAdded: boolean;
+	onPress: (name: string) => void;
+};
+
 const OptionsCard = ({
 	name,
 	price,
 	image,
-}: {
-	name: string;
-	price: number;
-	image: ImageSourcePropType;
-}) => {
+	isAdded,
+	onPress,
+}: OptionsCardProps) => {
+	const handlePress = () => {
+		const formattedName = name?.toLowerCase();
+		onPress(formattedName);
+	};
+
 	return (
-		<TouchableOpacity style={styles.container}>
+		<TouchableOpacity
+			style={styles.container}
+			onPress={handlePress}>
 			<View style={styles.imageContainer}>
 				<Image
 					source={image}
@@ -37,12 +50,18 @@ const OptionsCard = ({
 				<Text
 					style={styles.name}
 					numberOfLines={2}>
-					{name}
+					{isAdded ? "Added !" : name}
 				</Text>
 
-				<View style={styles.icon}>
+				<View
+					style={[
+						styles.icon,
+						isAdded
+							? { backgroundColor: "#107606ff" }
+							: { backgroundColor: "#EF2A39" },
+					]}>
 					<Image
-						source={images.plus}
+						source={isAdded ? images.check : images.plus}
 						resizeMode="contain"
 						tintColor={"#FFFFFF"}
 						style={{ height: 8.75, width: 8.75 }}

@@ -1,4 +1,4 @@
-import { CartProvider } from "@/context/cartProvider";
+import { StateProvider } from "@/context/StateProvider";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
@@ -20,8 +20,8 @@ export default function RootLayout() {
 	if (!fontsLoaded) return null;
 
 	return (
-		<CartProvider>
+		<StateProvider>
 			<Stack screenOptions={{ headerShown: false }} />
-		</CartProvider>
+		</StateProvider>
 	);
 }
