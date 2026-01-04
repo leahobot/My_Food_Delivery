@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
@@ -10,24 +10,40 @@ import { images } from "@/constants";
 import { MenuItem } from "@/constants/types";
 import { useRouter } from "expo-router";
 
-const MenuCard = ({ item }: { item: MenuItem }) => {
+const MenuCard = ({ item, index }: { item: MenuItem; index: number }) => {
 	const router = useRouter();
-	const { addToCart } = useStateContext();
+	const { addToCart, cartItems } = useStateContext();
 
+	const isFirstItem = index % 2 === 0;
 	const [isItemAdded, setIsItemAdded] = useState(false);
+	const cartItem =
+		cartItems.find((cartItem) => cartItem.$id === item.$id?.toString()) ||
+		item;
 
 	const handleAddToCart = async () => {
-		setIsItemAdded(true);
+		if (isItemAdded) return;
 
-		addToCart(item);
-		setTimeout(() => {
+		setIsItemAdded(true);
+		addToCart({
+			...item,
+			quantity: 1,
+			amount: cartItem.amount ? 0 : item.price,
+		});
+	};
+
+	useEffect(() => {
+		if (!isItemAdded) return;
+
+		const timer = setTimeout(() => {
 			setIsItemAdded(false);
 		}, 2000);
-	};
+
+		return () => clearTimeout(timer);
+	}, [isItemAdded]);
 
 	return (
 		<TouchableOpacity
-			style={styles.card}
+			style={[styles.card, isFirstItem && { marginTop: -60 }]}
 			onPress={() =>
 				router.push({
 					pathname: "/menuDetails/[id]",
@@ -46,32 +62,30 @@ const MenuCard = ({ item }: { item: MenuItem }) => {
 				/>
 			</View>
 
-			<View style={styles.textContainer}>
-				<Text
-					numberOfLines={2}
-					style={styles.titleText}>
-					{item.name}
-				</Text>
-				<Text style={styles.priceText}>
-					From {item.currency} ${item.price?.toFixed(2)}
-				</Text>
+			<Text
+				numberOfLines={2}
+				style={styles.titleText}>
+				{item.name}
+			</Text>
+			<Text style={styles.priceText}>
+				From {item.currency} ${item.price?.toFixed(2)}
+			</Text>
 
-				{isItemAdded ? (
-					<Text style={styles.itemAddedText}>Item Added!</Text>
-				) : (
-					<Pressable
-						style={styles.addToCart}
-						onPress={handleAddToCart}>
-						<Image
-							source={images.plus}
-							resizeMode="contain"
-							style={{ width: 18, height: 18 }}
-						/>
+			{isItemAdded ? (
+				<Text style={styles.itemAddedText}>Item Added!</Text>
+			) : (
+				<Pressable
+					style={styles.addToCart}
+					onPress={handleAddToCart}>
+					<Image
+						source={images.plus}
+						resizeMode="contain"
+						style={{ width: 18, height: 18 }}
+					/>
 
-						<Text style={styles.buttonText}>Add to cart</Text>
-					</Pressable>
-				)}
-			</View>
+					<Text style={styles.buttonText}>Add to cart</Text>
+				</Pressable>
+			)}
 		</TouchableOpacity>
 	);
 };

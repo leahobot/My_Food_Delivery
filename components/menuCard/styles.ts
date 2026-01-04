@@ -33,10 +33,8 @@ export const styles = StyleSheet.create({
 		width: "100%",
 		height: "100%",
 	},
-	textContainer: {
-		marginTop: 65,
-	},
 	titleText: {
+		marginTop: 65,
 		fontFamily: fontFamilies.bold,
 		fontSize: fontSizes.lg,
 		color: "#181C2E",
@@ -50,9 +48,12 @@ export const styles = StyleSheet.create({
 		marginVertical: 8,
 	},
 	addToCart: {
+		width: "100%",
+		position: "absolute",
+		bottom: 20,
+		left: 30,
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "center",
 		gap: 4,
 	},
 	buttonText: {
@@ -63,7 +64,10 @@ export const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	itemAddedText: {
-		marginTop: 2,
+		width: "100%",
+		position: "absolute",
+		bottom: 20,
+		left: 13,
 		fontFamily: fontFamilies.bold,
 		fontSize: fontSizes.md,
 		color: "#0a672cff",

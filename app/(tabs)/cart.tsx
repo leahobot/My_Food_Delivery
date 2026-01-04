@@ -12,8 +12,6 @@ import CartItem from "@/components/cartItem";
 import PaymentSummary from "@/components/paymentSummary";
 import { useStateContext } from "@/context/StateProvider";
 
-// components
-
 const Cart = () => {
 	const router = useRouter();
 	const { cartItems } = useStateContext();

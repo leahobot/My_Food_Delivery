@@ -24,13 +24,18 @@ export type TabIconProps = {
 	cartItems?: number;
 };
 
+export type Option = {
+	name: string;
+	amount: number;
+};
+
 export type MenuOptions = {
-	toppings: string[];
-	sides: string[];
+	toppings: Option[];
+	sides: Option[];
 };
 
 export type MenuItem = {
-	$id: number;
+	$id: number | string;
 	$createdAt: string;
 	$updatedAt: string;
 	name: string;
@@ -46,9 +51,10 @@ export type MenuItem = {
 	allergens?: string[];
 	isAvailable?: boolean;
 	currency?: string;
-	toppings?: string[];
-	sides?: string[];
+	toppings: Option[];
+	sides: Option[];
 	quantity?: number;
+	amount?: number;
 	totalAmount?: number;
 };
 
@@ -56,11 +62,9 @@ export type StateContextType = {
 	cartItems: MenuItem[];
 	noOfCartItems: number;
 	loading: boolean;
-	menuOptions: MenuOptions;
 	addToCart: (item: MenuItem) => void;
+	updateCart: (item: MenuItem) => void;
 	removeFromCart: (itemId: string) => void;
 	getMenuItemById: (itemId: string) => MenuItem | undefined;
 	clearCart: () => void;
-	toggleTopping: (topping: string) => void;
-	toggleSide: (topping: string) => void;
 };

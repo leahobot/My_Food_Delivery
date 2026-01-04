@@ -11,9 +11,23 @@ import { useStateContext } from "@/context/StateProvider";
 import Checkbox from "@/libs/checkbox";
 
 const CartItem = ({ cartItem }: { cartItem: MenuItem }) => {
-	const { removeFromCart } = useStateContext();
+	const { updateCart, removeFromCart } = useStateContext();
 
 	const [checked, setChecked] = useState(false);
+
+	const handleQuantity = (action: "increment" | "decrement") => {
+		const quantity = cartItem.quantity || 1;
+
+		const newQuantity =
+			action === "increment"
+				? Math.min(quantity + 1, 100)
+				: Math.max(quantity - 1, 1);
+
+		updateCart({
+			...cartItem,
+			quantity: newQuantity,
+		});
+	};
 
 	return (
 		<View style={styles.container}>
@@ -36,10 +50,14 @@ const CartItem = ({ cartItem }: { cartItem: MenuItem }) => {
 
 			<View style={styles.textContainer}>
 				<Text style={styles.name}>{cartItem.name}</Text>
-				<Text style={styles.price}>${cartItem.price?.toFixed(2)}</Text>
+				<Text style={styles.price}>
+					${cartItem?.totalAmount?.toFixed(2) || 0}
+				</Text>
 
 				<View style={styles.itemCountContainer}>
-					<Pressable style={styles.iconCountContainer}>
+					<Pressable
+						style={styles.iconCountContainer}
+						onPress={() => handleQuantity("decrement")}>
 						<Image
 							source={images.minus}
 							resizeMode="contain"
@@ -48,10 +66,12 @@ const CartItem = ({ cartItem }: { cartItem: MenuItem }) => {
 					</Pressable>
 
 					<Text style={styles.itemCount}>
-						{cartItem.quantity || 1}
+						{cartItem?.quantity || 1}
 					</Text>
 
-					<Pressable style={styles.iconCountContainer}>
+					<Pressable
+						style={styles.iconCountContainer}
+						onPress={() => handleQuantity("increment")}>
 						<Image
 							source={images.plus}
 							resizeMode="contain"

@@ -45,7 +45,7 @@ const MenuDetailsCard = ({ menuItem }: { menuItem: MenuItem }) => {
 					</View>
 
 					<Text style={styles.rating}>
-						{menuItem.rating.toFixed(1)}/5
+						{menuItem.rating.toFixed(1)}/5.0
 					</Text>
 				</View>
 

@@ -14,7 +14,7 @@ type OptionsCardProps = {
 	price: number;
 	image: ImageSourcePropType;
 	isAdded: boolean;
-	onPress: (name: string) => void;
+	onPress: ({ name, amount }: { name: string; amount: number }) => void;
 };
 
 const OptionsCard = ({
@@ -25,8 +25,9 @@ const OptionsCard = ({
 	onPress,
 }: OptionsCardProps) => {
 	const handlePress = () => {
-		const formattedName = name?.toLowerCase();
-		onPress(formattedName);
+		const formattedValue = { name: name?.toLowerCase(), amount: price };
+
+		onPress(formattedValue);
 	};
 
 	return (

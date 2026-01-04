@@ -1,6 +1,6 @@
 import { useStateContext } from "@/context/StateProvider";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
 	FlatList,
 	Image,
@@ -15,22 +15,82 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 // constants
 import { images, sides, toppings } from "@/constants";
+import { MenuOptions, Option } from "@/constants/types";
 import { styles } from "./styles";
 
 // components
-import Allergens from "@/components/Allergens/Index";
+import Allergens from "@/components/allergens";
 import MenuDetailsCard from "@/components/menuDetailsCard";
 import OptionsCard from "@/components/optionsCard";
 
 const MenuDetails = () => {
 	const router = useRouter();
-
 	const { id } = useLocalSearchParams<{ id: string }>();
-	const { menuOptions, getMenuItemById, toggleTopping, toggleSide } =
-		useStateContext();
+	const { getMenuItemById, addToCart } = useStateContext();
 
 	const menuItem = getMenuItemById(id);
 
+	const initialOrderAmount = menuItem?.price || 0;
+	const [menuOptions, setMenuOptions] = useState<MenuOptions>({
+		toppings: [],
+		sides: [],
+	});
+	const [menuTotals, setMenuTotals] = useState({
+		quantity: 1,
+		amount: initialOrderAmount,
+	});
+
+	const handleQuantity = (action: "increment" | "decrement") => {
+		setMenuTotals((prev) => {
+			const nextQuantity =
+				action === "increment"
+					? Math.min(prev.quantity + 1, 100)
+					: Math.max(prev.quantity - 1, 1);
+
+			return {
+				...prev,
+				quantity: nextQuantity,
+			};
+		});
+	};
+
+	const updateAmount = (delta: number) => {
+		setMenuTotals((prev) => ({
+			...prev,
+			amount: Math.max(prev.amount + delta, initialOrderAmount),
+		}));
+	};
+
+	const handleAdditions = (type: keyof MenuOptions, value: Option) => {
+		setMenuOptions((prev) => {
+			const exists = prev[type].some((i) => i.name === value.name);
+			updateAmount(exists ? -value.amount : value.amount);
+
+			return {
+				...prev,
+				[type]: exists
+					? prev[type].filter((i) => i.name !== value.name)
+					: [...prev[type], value],
+			};
+		});
+	};
+
+	const handleAddToCart = () => {
+		if (menuItem) {
+			const { toppings, sides } = menuOptions;
+
+			const newMenuItem = {
+				...menuItem,
+				quantity: menuTotals.quantity,
+				amount: menuTotals.amount,
+				toppings,
+				sides,
+			};
+
+			addToCart(newMenuItem);
+			router.push("/(tabs)/cart");
+		}
+	};
 	return (
 		<SafeAreaView style={styles.detailsTab}>
 			{/* Header */}
@@ -55,7 +115,7 @@ const MenuDetails = () => {
 			</View>
 
 			{/* Content */}
-			{!menuItem ? (
+			{!id || !menuItem ? (
 				<View style={styles.emptyDetailsTab}>
 					<Image
 						source={images.emptyState}
@@ -106,19 +166,25 @@ const MenuDetails = () => {
 					<FlatList
 						data={toppings}
 						horizontal
+						removeClippedSubviews
+						initialNumToRender={5}
+						windowSize={3}
 						showsHorizontalScrollIndicator={false}
 						contentContainerStyle={styles.listContainer}
 						keyExtractor={(item) => item.name}
 						renderItem={({ item }) => {
-							const isToppingAdded =
-								menuOptions.toppings?.includes(
-									item.name?.toLowerCase()
-								);
+							const isToppingAdded = menuOptions.toppings.some(
+								(topping) =>
+									topping.name === item.name?.toLowerCase()
+							);
+
 							return (
 								<OptionsCard
 									{...item}
 									isAdded={isToppingAdded}
-									onPress={(text) => toggleTopping(text)}
+									onPress={(item) =>
+										handleAdditions("toppings", item)
+									}
 								/>
 							);
 						}}
@@ -129,19 +195,24 @@ const MenuDetails = () => {
 					<FlatList
 						data={sides}
 						horizontal
+						removeClippedSubviews
+						initialNumToRender={5}
+						windowSize={3}
 						showsHorizontalScrollIndicator={false}
 						contentContainerStyle={styles.listContainer}
 						keyExtractor={(item) => item.name}
 						renderItem={({ item }) => {
-							const isSideAdded = menuOptions.sides?.includes(
-								item.name?.toLowerCase()
+							const isSideAdded = menuOptions.sides.some(
+								(side) => side.name === item.name?.toLowerCase()
 							);
 
 							return (
 								<OptionsCard
 									{...item}
 									isAdded={isSideAdded}
-									onPress={(text) => toggleSide(text)}
+									onPress={(item) =>
+										handleAdditions("sides", item)
+									}
 								/>
 							);
 						}}
@@ -149,7 +220,9 @@ const MenuDetails = () => {
 
 					<View style={styles.addButton}>
 						<View style={styles.itemCountContainer}>
-							<Pressable style={styles.iconCountContainer}>
+							<Pressable
+								style={styles.iconCountContainer}
+								onPress={() => handleQuantity("decrement")}>
 								<Image
 									source={images.minus}
 									resizeMode="contain"
@@ -157,9 +230,13 @@ const MenuDetails = () => {
 								/>
 							</Pressable>
 
-							<Text style={styles.itemCount}>2</Text>
+							<Text style={styles.itemCount}>
+								{menuTotals.quantity}
+							</Text>
 
-							<Pressable style={styles.iconCountContainer}>
+							<Pressable
+								style={styles.iconCountContainer}
+								onPress={() => handleQuantity("increment")}>
 								<Image
 									source={images.plus}
 									resizeMode="contain"
@@ -168,14 +245,20 @@ const MenuDetails = () => {
 							</Pressable>
 						</View>
 
-						<TouchableOpacity style={styles.button}>
+						<TouchableOpacity
+							style={styles.button}
+							onPress={handleAddToCart}>
 							<Image
 								source={images.bag}
 								resizeMode="contain"
 								style={{ width: 14, height: 14 }}
 							/>
 							<Text style={styles.buttonText}>
-								Add to cart ($12)
+								Add to cart ($
+								{(
+									menuTotals.amount * menuTotals.quantity
+								)?.toFixed(2)}
+								)
 							</Text>
 						</TouchableOpacity>
 					</View>

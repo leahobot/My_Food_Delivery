@@ -17,7 +17,16 @@ const ListItem = ({ label, value }: { label: string; value: string }) => {
 };
 
 const PaymentSummary = () => {
-	const { cartItems, noOfCartItems } = useStateContext();
+	const { cartItems } = useStateContext();
+
+	const totalAmount = cartItems.reduce(
+		(sum, item) => sum + (item.totalAmount ?? 0),
+		0
+	);
+	const totalQuantity = cartItems.reduce(
+		(sum, item) => sum + (item.quantity ?? 1),
+		0
+	);
 
 	return (
 		<View style={styles.main}>
@@ -26,8 +35,8 @@ const PaymentSummary = () => {
 
 				<View style={styles.list}>
 					<ListItem
-						label={`Total Items (${noOfCartItems})`}
-						value={`$100`}
+						label={`Total Items (${totalQuantity})`}
+						value={`$${totalAmount?.toFixed(2)}`}
 					/>
 					<ListItem
 						label="Delivery Fee"

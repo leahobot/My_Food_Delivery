@@ -285,7 +285,7 @@ export const baseStyles = StyleSheet.create({
 		textAlign: "center",
 	},
 	searchResults: {
-		marginTop: 60,
+		marginTop: 100,
 		justifyContent: "space-between",
 	},
 	cartHeader: {

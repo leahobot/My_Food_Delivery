@@ -176,35 +176,47 @@ const Search = () => {
 			</View>
 
 			{/* Results */}
-			<FlatList
-				data={filteredMenuItems}
-				keyExtractor={(item: MenuItem) => item.$id.toString()}
-				showsVerticalScrollIndicator={false}
-				numColumns={2}
-				refreshing={loading}
-				onRefresh={refetch}
-				columnWrapperStyle={baseStyles.searchResults}
-				ListEmptyComponent={
-					!loading ? (
-						<View style={baseStyles.emptyState}>
-							<Image
-								source={images.emptyState}
-								resizeMode="cover"
-								style={baseStyles.emptyStateImage}
-							/>
-							<Text style={baseStyles.emptyStateTitle}>
-								Nothing matched your search
-							</Text>
-							<Text style={baseStyles.emptyStateText}>
-								Try a different search term or check for typos.
-							</Text>
-						</View>
-					) : null
-				}
-				renderItem={({ item }: { item: MenuItem }) => (
-					<MenuCard item={item} />
-				)}
-			/>
+			<View>
+				<FlatList
+					data={filteredMenuItems}
+					keyExtractor={(item: MenuItem) => item.$id.toString()}
+					showsVerticalScrollIndicator={false}
+					numColumns={2}
+					refreshing={loading}
+					onRefresh={refetch}
+					columnWrapperStyle={baseStyles.searchResults}
+					ListEmptyComponent={
+						!loading ? (
+							<View style={baseStyles.emptyState}>
+								<Image
+									source={images.emptyState}
+									resizeMode="cover"
+									style={baseStyles.emptyStateImage}
+								/>
+								<Text style={baseStyles.emptyStateTitle}>
+									Nothing matched your search
+								</Text>
+								<Text style={baseStyles.emptyStateText}>
+									Try a different search term or check for
+									typos.
+								</Text>
+							</View>
+						) : null
+					}
+					renderItem={({
+						item,
+						index,
+					}: {
+						item: MenuItem;
+						index: number;
+					}) => (
+						<MenuCard
+							item={item}
+							index={index}
+						/>
+					)}
+				/>
+			</View>
 		</SafeAreaView>
 	);
 };

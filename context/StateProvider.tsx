@@ -1,4 +1,4 @@
-import { MenuItem, MenuOptions, StateContextType } from "@/constants/types";
+import { MenuItem, Option, StateContextType } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, {
 	createContext,
@@ -18,10 +18,6 @@ export const StateProvider = ({ children }: { children: ReactNode }) => {
 	const [cartItems, setCartItems] = useState<MenuItem[]>([]);
 	const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [menuOptions, setMenuOptions] = useState<MenuOptions>({
-		toppings: [],
-		sides: [],
-	});
 
 	// Load cart from AsyncStorage once
 	const loadCart = useCallback(async () => {
@@ -61,9 +57,92 @@ export const StateProvider = ({ children }: { children: ReactNode }) => {
 		}
 	};
 
+	const mergeOptions = (a: Option[] = [], b: Option[] = []) => {
+		const map = new Map<string, Option>();
+
+		[...a, ...b].forEach((item) => {
+			map.set(item.name, item);
+		});
+
+		return Array.from(map.values());
+	};
+
+	const updateCart = (item: MenuItem) => {
+		setCartItems((prev) => {
+			const existingIndex = prev.findIndex(
+				(cartItem) => cartItem.$id === item.$id
+			);
+
+			const updated = prev.map((cartItem, index) => {
+				if (index !== existingIndex) return cartItem;
+
+				const quantity = item.quantity ?? 1;
+				const amount = item.amount ?? 0;
+
+				return {
+					...cartItem,
+					quantity,
+					amount,
+					totalAmount: amount * quantity,
+				};
+			});
+
+			persistCart(updated);
+			return updated;
+		});
+	};
+
 	const addToCart = (item: MenuItem) => {
 		setCartItems((prev) => {
-			const updated = [...prev, item];
+			const existingIndex = prev.findIndex(
+				(cartItem) => cartItem.$id === item.$id
+			);
+
+			let updated: MenuItem[];
+
+			if (existingIndex === -1) {
+				// Item does not exist → add fresh
+				const totalAmount =
+					(item.amount ?? item.price) * (item.quantity ?? 1);
+				const newItem = {
+					...item,
+					totalAmount,
+				};
+
+				updated = [...prev, newItem];
+			} else {
+				// Item exists → merge
+				updated = prev.map((cartItem, index) => {
+					if (index !== existingIndex) return cartItem;
+
+					const mergedToppings = mergeOptions(
+						cartItem.toppings,
+						item.toppings
+					);
+
+					const mergedSides = mergeOptions(
+						cartItem.sides,
+						item.sides
+					);
+
+					const quantity =
+						(cartItem.quantity ?? 1) + (item.quantity ?? 1);
+
+					const higherAmount = Math.max(
+						cartItem.amount ?? 1,
+						item.amount ?? 1
+					);
+
+					return {
+						...cartItem,
+						toppings: mergedToppings,
+						sides: mergedSides,
+						quantity,
+						higherAmount,
+						totalAmount: higherAmount * quantity,
+					};
+				});
+			}
 
 			persistCart(updated);
 			return updated;
@@ -75,8 +154,8 @@ export const StateProvider = ({ children }: { children: ReactNode }) => {
 			const updated = prev.filter(
 				(item: MenuItem) => item.$id.toString() !== itemId
 			);
-			persistCart(updated);
 
+			persistCart(updated);
 			return updated;
 		});
 	};
@@ -93,45 +172,17 @@ export const StateProvider = ({ children }: { children: ReactNode }) => {
 		AsyncStorage.removeItem(CART_KEY);
 	};
 
-	const toggleTopping = (name: string) => {
-		setMenuOptions((prev) => {
-			const exists = prev.toppings.includes(name);
-
-			return {
-				...prev,
-				toppings: exists
-					? prev.toppings.filter((t) => t !== name)
-					: [...prev.toppings, name],
-			};
-		});
-	};
-
-	const toggleSide = (name: string) => {
-		setMenuOptions((prev) => {
-			const exists = prev.sides.includes(name);
-
-			return {
-				...prev,
-				sides: exists
-					? prev.sides.filter((s) => s !== name)
-					: [...prev.sides, name],
-			};
-		});
-	};
-
 	return (
 		<StateContext.Provider
 			value={{
 				cartItems,
 				noOfCartItems: cartItems.length,
 				loading,
-				menuOptions,
 				addToCart,
 				removeFromCart,
+				updateCart,
 				getMenuItemById,
 				clearCart,
-				toggleTopping,
-				toggleSide,
 			}}>
 			{children}
 		</StateContext.Provider>
